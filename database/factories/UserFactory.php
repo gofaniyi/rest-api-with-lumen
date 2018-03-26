@@ -2,7 +2,7 @@
 
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     return [
-        'uid'                   => str_random(32),
+        'uid'                   => str_random(14),
         'firstName'             => $faker->firstName,
         'lastName'              => $faker->lastName,
         'email'                 => $faker->email,

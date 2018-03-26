@@ -16,34 +16,47 @@ $router->get('/', function () {
     return app()->version();
 });
 
-// Generate random string
-$router->get('appKey', function () {
-    return str_random('32');
+
+//$router->group(['middleware' => ['client_credentials']], function () use ($router) {
+//    $router->get('/test',  [
+//        'uses'       => 'UserController@test',
+//    ]);
+//});
+
+$router->group(['prefix' => 'api/v1'], function () use ($router) {
+
+    $router->group(['prefix' => 'users'], function () use ($router) {
+
+        $router->post('signin', 'AccessTokenController@createAccessToken');
+
+        $router->group(['middleware' => ['auth:api', 'throttle:60']], function () use ($router) {
+            $router->post('/', [
+                'uses'       => 'UserController@store',
+                'middleware' => "scope:users,users:create"
+            ]);
+            $router->get('/',  [
+                'uses'       => 'UserController@index',
+                'middleware' => "scope:users,users:list"
+            ]);
+            $router->get('{id}', [
+                'uses'       => 'UserController@show',
+                'middleware' => "scope:users,users:read"
+            ]);
+            $router->put('{id}', [
+                'uses'       => 'UserController@update',
+                'middleware' => "scope:users,users:write"
+            ]);
+            $router->delete('{id}', [
+                'uses'       => 'UserController@destroy',
+                'middleware' => "scope:users,users:delete"
+            ]);
+        });
+
+
+    });
+
+
+
 });
 
-// route for creating access_token
-$router->post('accessToken', 'AccessTokenController@createAccessToken');
-
-$router->group(['middleware' => ['auth:api', 'throttle:60']], function () use ($router) {
-    $router->post('users', [
-        'uses'       => 'UserController@store',
-        'middleware' => "scope:users,users:create"
-    ]);
-    $router->get('users',  [
-        'uses'       => 'UserController@index',
-        'middleware' => "scope:users,users:list"
-    ]);
-    $router->get('users/{id}', [
-        'uses'       => 'UserController@show',
-        'middleware' => "scope:users,users:read"
-    ]);
-    $router->put('users/{id}', [
-        'uses'       => 'UserController@update',
-        'middleware' => "scope:users,users:write"
-    ]);
-    $router->delete('users/{id}', [
-        'uses'       => 'UserController@destroy',
-        'middleware' => "scope:users,users:delete"
-    ]);
-});
 

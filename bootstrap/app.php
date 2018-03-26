@@ -78,7 +78,8 @@ $app->configure('database');
      'auth' => App\Http\Middleware\Authenticate::class,
      'throttle' => App\Http\Middleware\ThrottleRequests::class,
      'scopes'   => \Laravel\Passport\Http\Middleware\CheckScopes::class,
-     'scope'    => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class
+     'scope'    => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
+     'client_credentials' => \Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
  ]);
 
 /*

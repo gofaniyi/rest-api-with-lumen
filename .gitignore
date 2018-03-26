@@ -2,7 +2,8 @@ Homestead.json
 Homestead.yaml
 .env
 /.vagrant/
-/vendor/
-/.idea/
+vendor/
+.idea/
 /storage/*.key
 composer.lock
+composer.phar
